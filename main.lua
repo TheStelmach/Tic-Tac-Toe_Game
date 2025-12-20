@@ -24,16 +24,28 @@ function Love.load()
     scalingFactor = 1.2 -- figure image scaling factor
     imageScale = (scalingFactor * 512)  -- 512 is the original image size
 
+    strokes = {Love.graphics.newImage("sprites/stroke0.png"),
+               Love.graphics.newImage("sprites/stroke1.png"),
+               Love.graphics.newImage("sprites/stroke2.png"),
+               Love.graphics.newImage("sprites/stroke3.png"),
+               Love.graphics.newImage("sprites/stroke4.png"),
+               Love.graphics.newImage("sprites/stroke5.png"),
+               Love.graphics.newImage("sprites/stroke6.png"),} 
+
     beepSound = Love.audio.newSource("sounds/beepSound.mp3", "static")
     gameStartSound = Love.audio.newSource("sounds/gameStarted.mp3", "static")
     moveMadeSound = Love.audio.newSource("sounds/moveMade.mp3", "static")
     gameEndSound = Love.audio.newSource("sounds/gameEnded.mp3", "static")
     welcomeSound = Love.audio.newSource("sounds/welcomeSound.mp3", "static")
+
+    mainFont = Love.graphics.newFont("fonts/atop-font/Atop-R99O3.ttf", 60)
+    firstText = Love.graphics.newText( mainFont, "TIC-TAC-TOE" )
+
     r_back, g_back, b_back, a_back = 255/255, 251/255, 219/255, 0
     Love.graphics.setBackgroundColor(r_back, g_back, b_back, a_back)
     r_line, g_line, b_line, a_line = 235/255, 216/255, 61/255, 1
-    --r_circle, g_circle, b_circle, a_circle = 245/255, 93/255, 67/255, 0.8
-    --r_cross, g_cross, b_cross, a_cross = 119/255, 118/255, 188/255, 0.8
+    r_stroke, g_stroke, b_stroke, a_stroke = 235/255, 216/255, 61/255, 0.7
+
 
     r_circle, g_circle, b_circle, a_circle = 1, 1, 1, 1
     r_cross, g_cross, b_cross, a_cross = 1, 1, 1, 1
@@ -51,7 +63,6 @@ function Love.load()
 
     for i = 1, maxFigures do
         figure[i] = Figure:new(i, 0, 0)
-        print("Created figure index: " .. figure[i].index)
     end
     currentIndex = 1
     moves = 0
@@ -71,13 +82,10 @@ function Love.update()
     windowWidth = Love.graphics.getWidth( )
         
     if gameStarted == false and gameOver == false and screenUpdated == true then
-        print("Game menu - Click to start the game")
-
             if Love.mouse.isDown(1) then
                 gameStarted = true
                 -- Love.audio.play(gameStartSound)
                 Love.audio.play(beepSound)
-                print("Game Started!")
                 sleep(0.5)  -- Simple debounce to prevent multiple clicks
             end
     elseif gameStarted == true and gameOver == false and screenUpdated == true then
@@ -104,13 +112,29 @@ function Love.update()
         end
 
         if winner ~= "unknown" then
-            print("Game Over! Winner: " .. winner)
             gameOver = true
             sleep(0.5)
             Love.audio.play(gameEndSound)
         end
     elseif gameStarted == true and gameOver == true and screenUpdated == true then
+        if Love.mouse.isDown(1) then
+                gameOver = false
 
+                -- Reset the game board
+                for i = 1, 9 do
+                    cell[i] = "empty"
+                end
+                for i = 1, maxFigures do
+                    figure[i].row = 0
+                    figure[i].col = 0
+                    figure[i].player = "empty"
+                end
+                currentIndex = 1
+                moves = 0
+                winner = "unknown"
+                Love.audio.play(beepSound)
+                sleep(0.5)  -- Simple debounce to prevent multiple clicks
+            end
     else
         
     end
@@ -119,6 +143,12 @@ end
 function Love.draw()
 
     if gameStarted == false and gameOver == false then
+        Love.graphics.setColor( r_stroke, g_stroke, b_stroke, a_stroke )
+        Love.graphics.draw(strokes[1], windowWidth * 0.08, windowHeight * 0.1, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
+        Love.graphics.draw(strokes[2], windowWidth * 0.22, windowHeight * 0.6, 0, windowWidth / (3*imageScale), windowHeight / (4*imageScale))
+        Love.graphics.draw(strokes[3], windowWidth * 0.22, windowHeight * 0.72, 0, windowWidth / (3*imageScale), windowHeight / (4*imageScale))
+        Love.graphics.setColor( r_stroke, g_stroke, b_stroke, 0.9 )
+        drawCenteredText(firstText)
         
     elseif gameStarted == true and gameOver == false then
         Love.graphics.setColor( r_line, g_line, b_line, a_line )
@@ -145,6 +175,9 @@ function Love.draw()
         end
 
     elseif gameStarted == true and gameOver == true then
+        Love.graphics.setColor( r_stroke, g_stroke, b_stroke, a_stroke )
+        Love.graphics.draw(strokes[4], windowWidth * 0.08, windowHeight * 0.25, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
+        Love.graphics.draw(strokes[5], windowWidth * 0.08, windowHeight * 0.6, 0, windowWidth / (2*imageScale), windowHeight / (3*imageScale))
         
 
     else
@@ -213,5 +246,6 @@ function sleep(sec)
     Socket.select(nil, nil, sec)
 end
 
-
--- As soon as I added sprites, the bug appeared where the first figures would disappear but I still cannot click on their cells
+function drawCenteredText(text)
+	    Love.graphics.draw(text, 125, 140)
+end
