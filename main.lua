@@ -38,8 +38,7 @@ function Love.load()
     gameEndSound = Love.audio.newSource("sounds/gameEnded.mp3", "static")
     welcomeSound = Love.audio.newSource("sounds/welcomeSound.mp3", "static")
 
-    mainFont = Love.graphics.newFont("fonts/atop-font/Atop-R99O3.ttf", 60)
-    firstText = Love.graphics.newText( mainFont, "TIC-TAC-TOE" )
+    mainFont = Love.graphics.newFont("fonts/atop-font/Atop-R99O3.ttf", 50)
 
     r_back, g_back, b_back, a_back = 255/255, 251/255, 219/255, 0
     Love.graphics.setBackgroundColor(r_back, g_back, b_back, a_back)
@@ -144,12 +143,17 @@ function Love.draw()
 
     if gameStarted == false and gameOver == false then
         Love.graphics.setColor( r_stroke, g_stroke, b_stroke, a_stroke )
-        Love.graphics.draw(strokes[1], windowWidth * 0.08, windowHeight * 0.1, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
-        Love.graphics.draw(strokes[2], windowWidth * 0.22, windowHeight * 0.6, 0, windowWidth / (3*imageScale), windowHeight / (4*imageScale))
-        Love.graphics.draw(strokes[3], windowWidth * 0.22, windowHeight * 0.72, 0, windowWidth / (3*imageScale), windowHeight / (4*imageScale))
+        Love.graphics.draw(strokes[1], windowWidth * 0.075, windowHeight * 0.1, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
+        Love.graphics.draw(strokes[6], windowWidth * 0.22, windowHeight * 0.6, 0, windowWidth / (3*imageScale), windowHeight / (3*imageScale))
+        Love.graphics.draw(strokes[3], windowWidth * 0.22, windowHeight * 0.75, 0, windowWidth / (3*imageScale), windowHeight / (4*imageScale))
         Love.graphics.setColor( r_stroke, g_stroke, b_stroke, 0.9 )
-        drawCenteredText(firstText)
+        drawCenteredText(Love.graphics.newText(mainFont, "TIC-TAC-TOE"), windowWidth * 0.26, windowHeight * 0.25, 0, windowWidth / 600, windowHeight / 600,"white")
+        drawCenteredText(Love.graphics.newText(mainFont, "Play with Computer"), windowWidth * 0.24, windowHeight * 0.64, 0, windowWidth / 1050, windowHeight / 1050,"white")
+        drawCenteredText(Love.graphics.newText(mainFont, "Play with Friend"), windowWidth * 0.27, windowHeight * 0.765, 0, windowWidth / 1050, windowHeight / 1050,"white")
+        ------- remove to settings page later
+        drawCenteredText(Love.graphics.newText(mainFont, "made by: @TheStelmach"), windowWidth * 0.69, windowHeight * 0.97, 0, windowWidth / 2200, windowHeight / 2200,"violet")
         
+
     elseif gameStarted == true and gameOver == false then
         Love.graphics.setColor( r_line, g_line, b_line, a_line )
         Love.graphics.line( cellWidth, 0, cellWidth, windowHeight)
@@ -176,11 +180,23 @@ function Love.draw()
 
     elseif gameStarted == true and gameOver == true then
         Love.graphics.setColor( r_stroke, g_stroke, b_stroke, a_stroke )
-        Love.graphics.draw(strokes[4], windowWidth * 0.08, windowHeight * 0.25, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
-        Love.graphics.draw(strokes[5], windowWidth * 0.08, windowHeight * 0.6, 0, windowWidth / (2*imageScale), windowHeight / (3*imageScale))
-        
+        Love.graphics.draw(strokes[2], windowWidth * 0.08, windowHeight * 0.25, 0, windowWidth / (2*imageScale), windowHeight / (2*imageScale))
+        Love.graphics.draw(strokes[4], windowWidth * 0.22, windowHeight * 0.6, 0, windowWidth / (3*imageScale), windowHeight / (3*imageScale))
+        Love.graphics.draw(strokes[5], windowWidth * 0.08, windowHeight * 0.8, 0, windowWidth / (2*imageScale), windowHeight / (3*imageScale))
+        if winner == "X" then
+            drawCenteredText(Love.graphics.newText(mainFont, "CROSS WINS!"), windowWidth * 0.28, windowHeight * 0.3, 0, windowWidth / 700, windowHeight / 700,"white")
+        elseif winner == "O" then
+            drawCenteredText(Love.graphics.newText(mainFont, "NOUGHT WINS!"), windowWidth * 0.28, windowHeight * 0.3, 0, windowWidth / 700, windowHeight / 700,"white")
+        else
+            drawCenteredText(Love.graphics.newText(mainFont, "IT'S A DRAW!"), windowWidth * 0.28, windowHeight * 0.3, 0, windowWidth / 700, windowHeight / 700,"white")
+        end
 
+        drawCenteredText(Love.graphics.newText(mainFont, "Back to Main Menu"), windowWidth * 0.26, windowHeight * 0.635, 0, windowWidth / 1000, windowHeight / 1000,"white")
+        drawCenteredText(Love.graphics.newText(mainFont, "Click to Restart"), windowWidth * 0.28, windowHeight * 0.835, 0, windowWidth / 1000, windowHeight / 1000,"white")
+        
     else
+
+        drawCenteredText(Love.graphics.newText(mainFont, "made by: @TheStelmach"), windowWidth * 0.69, windowHeight * 0.97, 0, windowWidth / 2200, windowHeight / 2200,"black")
         
     end
     
@@ -246,6 +262,18 @@ function sleep(sec)
     Socket.select(nil, nil, sec)
 end
 
-function drawCenteredText(text)
-	    Love.graphics.draw(text, 125, 140)
+function drawCenteredText(text, x, y, r, sx, sy, color)
+    if color == "yellow" then
+        Love.graphics.setColor( 235/255, 216/255, 61/255, 0.75)
+    elseif color == "black" then
+        Love.graphics.setColor( 20/255, 20/255, 40/255, 1)
+    elseif color == "violet" then
+        Love.graphics.setColor( 119/255, 118/255, 188/255, 0.75)
+    elseif color == "white" then
+	    Love.graphics.setColor( r_back, g_back, b_back, 0.75)
+    else
+        Love.graphics.setColor( 0, 0, 1, 1)
+    end
+    Love.graphics.draw(text, x, y, r, sx, sy)
+    
 end
