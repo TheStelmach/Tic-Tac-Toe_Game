@@ -80,14 +80,7 @@ function Love.update()
     windowHeight = Love.graphics.getHeight( )
     windowWidth = Love.graphics.getWidth( )
         
-    if gameStarted == false and gameOver == false and screenUpdated == true then
-            if Love.mouse.isDown(1) then
-                gameStarted = true
-                -- Love.audio.play(gameStartSound)
-                Love.audio.play(beepSound)
-                sleep(0.5)  -- Simple debounce to prevent multiple clicks
-            end
-    elseif gameStarted == true and gameOver == false and screenUpdated == true then
+    if gameStarted == true and gameOver == false and screenUpdated == true then
         cellWidth = windowWidth / 3
         cellHeight = windowHeight / 3
         if moves >= 6 then
@@ -115,25 +108,7 @@ function Love.update()
             sleep(0.5)
             Love.audio.play(gameEndSound)
         end
-    elseif gameStarted == true and gameOver == true and screenUpdated == true then
-        if Love.mouse.isDown(1) then
-                gameOver = false
 
-                -- Reset the game board
-                for i = 1, 9 do
-                    cell[i] = "empty"
-                end
-                for i = 1, maxFigures do
-                    figure[i].row = 0
-                    figure[i].col = 0
-                    figure[i].player = "empty"
-                end
-                currentIndex = 1
-                moves = 0
-                winner = "unknown"
-                Love.audio.play(beepSound)
-                sleep(0.5)  -- Simple debounce to prevent multiple clicks
-            end
     else
         
     end
@@ -204,9 +179,22 @@ function Love.draw()
 end
 
 function makeBoard()
-    
-    if gameStarted == false and gameOver == false then
 
+    if gameStarted == false and gameOver == false then
+        if mouseX >= windowWidth * 0.22 and mouseX <= windowWidth * 0.55 and
+           mouseY >= windowHeight * 0.6 and mouseY <= windowHeight * 0.68 then
+            print("Play with Computer - Not implemented yet!")
+            Love.audio.play(beepSound)
+        elseif mouseX >= windowWidth * 0.22 and mouseX <= windowWidth * 0.55 and
+            mouseY >= windowHeight * 0.75 and mouseY <= windowHeight * 0.83 then
+            print("Play with Friend - Starting Game!")
+            gameStarted = true
+            Love.audio.play(gameStartSound)
+            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+        else
+            print("Click on one of the options to start the game.")
+            Love.audio.play(beepSound)
+        end
 
     elseif gameStarted == true and gameOver == false then
         col = math.floor(mouseX / cellWidth) + 1
@@ -243,13 +231,53 @@ function makeBoard()
             print("Cell clicked: Row " .. row .. ", Column " .. col)  
         end
     elseif gameStarted == true and gameOver == true then
-
+        if mouseX >= windowWidth * 0.22 and mouseX <= windowWidth * 0.55 and
+           mouseY >= windowHeight * 0.6 and mouseY <= windowHeight * 0.68 then
+            print("Back to Main Menu - Restarting Game!")
+            gameStarted = false
+            gameOver = false
+            screenUpdated = false
+            -- Reset the game board
+            for i = 1, 9 do
+                cell[i] = "empty"
+            end
+            for i = 1, maxFigures do
+                figure[i].row = 0
+                figure[i].col = 0
+                figure[i].player = "empty"
+            end
+            currentIndex = 1
+            moves = 0
+            winner = "unknown"
+            Love.audio.play(beepSound)
+            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+        elseif mouseX >= windowWidth * 0.22 and mouseX <= windowWidth * 0.55 and
+               mouseY >= windowHeight * 0.8 and mouseY <= windowHeight * 0.88 then
+            print("Restarting Game!")
+            gameStarted = true
+            gameOver = false
+            screenUpdated = false
+            -- Reset the game board
+            for i = 1, 9 do
+                cell[i] = "empty"
+            end
+            for i = 1, maxFigures do
+                figure[i].row = 0
+                figure[i].col = 0
+                figure[i].player = "empty"
+            end
+            currentIndex = 1
+            moves = 0
+            winner = "unknown"
+            Love.audio.play(beepSound)
+            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+        end
     else
 
     end
 end
 
-function Love.mousepressed( x, y, button, istouch, presses )
+function Love.mousepressed( x, y, button)
     if button == 1 then
         mouseX = x
         mouseY = y  
@@ -277,3 +305,6 @@ function drawCenteredText(text, x, y, r, sx, sy, color)
     Love.graphics.draw(text, x, y, r, sx, sy)
     
 end
+
+
+FIX WINNING LOGIC AND IMPLEMENT A SETTINGS MENU
