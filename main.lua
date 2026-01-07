@@ -1,5 +1,6 @@
----@diagnostic disable: lowercase-global
 -- game made as part of the LÖVE2d library
+
+---@diagnostic disable: lowercase-global
 
 Love = require("love")
 Figure = require("figure")
