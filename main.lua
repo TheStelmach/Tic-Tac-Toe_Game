@@ -1,5 +1,5 @@
 ---@diagnostic disable: lowercase-global
-
+-- game made as part of the LÖVE2d library
 
 Love = require("love")
 Figure = require("figure")
@@ -24,7 +24,7 @@ function Love.load()
         return Love.graphics.newImage("sprites/noughts/" .. noughtTable[math.random(#noughtTable)] .. ".png")
     end
     scalingFactor = 1.2 -- figure image scaling factor
-    imageScale = (scalingFactor * 512)  -- 512 is the original image size
+    imageScale = (scalingFactor * 512)  -- 512 - original image size
 
     strokes = {Love.graphics.newImage("sprites/strokes/stroke0.png"),
                Love.graphics.newImage("sprites/strokes/stroke1.png"),
@@ -249,13 +249,6 @@ function Love.draw()
         drawCenteredText(Love.graphics.newText(mainFont, "Sound: " .. sound), windowWidth * 0.15, windowHeight * 0.70, 0, windowWidth / 1000, windowHeight / 1000,"settingsText")
         drawCenteredText(Love.graphics.newText(mainFont, "Return "), windowWidth * 0.15, windowHeight * 0.85, 0, windowWidth / 1000, windowHeight / 1000,"settingsText")
         drawCenteredText(Love.graphics.newText(mainFont, "made by: @TheStelmach"), windowWidth * 0.69, windowHeight * 0.97, 0, windowWidth / 2200, windowHeight / 2200,"settingsText")
-        
--- settings page will contain:
--- color mode dark vs bright
--- sound on/off
--- difficulty level (for playing vs computer) simple, normal, impossible
--- playing mode (continuous vs limited moves)
--- grid size (3x3, 4x4, 5x5)
     end
     
     screenUpdated = true
@@ -272,7 +265,7 @@ function makeBoard()
             mouseY >= windowHeight * 0.75 and mouseY <= windowHeight * 0.83 then
             gameStarted = true
             Love.audio.play(gameStartSound)
-            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+            sleep(0.5)  -- debounce
         elseif mouseX >= windowWidth * 0.9 and mouseY <= windowHeight * 0.1 then
             gameOver = true
             Love.audio.play(beepSound)
@@ -333,14 +326,13 @@ function makeBoard()
             moves = 0
             winner = "unknown"
             Love.audio.play(beepSound)
-            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+            sleep(0.5)  -- debounce
         elseif mouseX >= windowWidth * 0.22 and mouseX <= windowWidth * 0.55 and
                mouseY >= windowHeight * 0.8 and mouseY <= windowHeight * 0.88 then
             print("Restarting Game!")
             gameStarted = true
             gameOver = false
             screenUpdated = false
-            -- Reset the game board
             for i = 1, 9 do
                 cell[i] = "empty"
             end
@@ -353,7 +345,7 @@ function makeBoard()
             moves = 0
             winner = "unknown"
             Love.audio.play(beepSound)
-            sleep(0.5)  -- Simple debounce to prevent multiple clicks
+            sleep(0.5) -- debounce
         end
     else
         if mouseY >= windowHeight * 0.41 and mouseY <= windowHeight * 0.47 then
@@ -454,6 +446,6 @@ end
 
 
 -- TO DO LIST:
--- DARK/BRIGHT COLOR MODE TOGGLE IN SETTINGS
+-- DARK/BRIGHT COLOR MODE TOGGLE IN SETTINGS - done
 -- IMPLEMENT AI FOR PLAYING VS COMPUTER 
--- ONLINE MULTIPLAYER (USING SOCKETS)
+-- ONLINE MULTIPLAYER (USING WEB SOCKETS)
